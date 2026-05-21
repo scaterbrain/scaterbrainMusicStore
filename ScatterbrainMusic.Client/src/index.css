@@ -1,0 +1,92 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito:wght@400;600;700;800&family=Permanent+Marker&display=swap');
+
+/* ── Scatterbrain Music Design Tokens ─────────────────────────────────────── */
+:root {
+  --cream:      #F5F0E8;
+  --navy:       #1A2744;
+  --orange:     #E8612A;
+  --teal:       #2B8C82;
+  --gold:       #D4A843;
+  --dark-navy:  #0F1929;
+  --mid-gray:   #6B7280;
+  --light-gray: #E8E4DB;
+  --white:      #FFFFFF;
+
+  --font-display: 'Bebas Neue', sans-serif;
+  --font-accent:  'Permanent Marker', cursive;
+  --font-body:    'Nunito', sans-serif;
+
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --shadow-sm: 0 2px 8px rgba(26,39,68,.12);
+  --shadow-md: 0 4px 20px rgba(26,39,68,.18);
+  --shadow-lg: 0 8px 40px rgba(26,39,68,.24);
+
+  --transition: 0.22s cubic-bezier(.4,0,.2,1);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--cream);
+  color: var(--navy);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--light-gray); }
+::-webkit-scrollbar-thumb { background: var(--navy); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--orange); }
+
+/* ── Utilities ──────────────────────────────────────────────────────────────── */
+.container { max-width: 1280px; margin: 0 auto; padding: 0 1.5rem; }
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 0.65rem 1.4rem; border-radius: var(--radius-sm); border: 2px solid transparent;
+  font-family: var(--font-body); font-weight: 700; font-size: 0.9rem;
+  cursor: pointer; transition: all var(--transition); text-decoration: none;
+  white-space: nowrap; letter-spacing: 0.02em;
+}
+.btn-primary   { background: var(--orange); color: var(--white); border-color: var(--orange); }
+.btn-primary:hover { background: #c9501f; border-color: #c9501f; transform: translateY(-1px); box-shadow: var(--shadow-md); }
+.btn-secondary { background: transparent; color: var(--navy); border-color: var(--navy); }
+.btn-secondary:hover { background: var(--navy); color: var(--white); }
+.btn-teal      { background: var(--teal); color: var(--white); border-color: var(--teal); }
+.btn-teal:hover { background: #226e66; border-color: #226e66; }
+.btn-ghost     { background: transparent; color: var(--mid-gray); border-color: transparent; }
+.btn-ghost:hover { color: var(--navy); background: var(--light-gray); }
+.btn:disabled  { opacity: 0.5; cursor: not-allowed; transform: none !important; }
+
+/* ── Star Rating ────────────────────────────────────────────────────────────── */
+.stars { color: var(--gold); font-size: 0.85rem; }
+
+/* ── Condition Badge ────────────────────────────────────────────────────────── */
+.badge {
+  display: inline-block; padding: 2px 10px; border-radius: 99px;
+  font-size: 0.72rem; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase;
+}
+.badge-new     { background: #d4edda; color: #1a6b32; }
+.badge-used    { background: #fff3cd; color: #856404; }
+.badge-vintage { background: #f8d7da; color: #721c24; }
+
+/* ── Toast ──────────────────────────────────────────────────────────────────── */
+.toast {
+  position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 9999;
+  background: var(--navy); color: var(--white);
+  padding: 0.8rem 1.4rem; border-radius: var(--radius-md);
+  font-weight: 700; box-shadow: var(--shadow-lg);
+  animation: slideUp 0.3s ease;
+  border-left: 4px solid var(--orange);
+}
+@keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ── Page transitions ───────────────────────────────────────────────────────── */
+.page-enter { animation: fadeIn 0.3s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }

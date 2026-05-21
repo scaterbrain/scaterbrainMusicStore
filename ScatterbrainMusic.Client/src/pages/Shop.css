@@ -1,0 +1,59 @@
+.shop__hero {
+  background: var(--navy); padding: 2.5rem 0 2rem;
+}
+.shop__title {
+  font-family: var(--font-display); font-size: 2.5rem; color: var(--white);
+  letter-spacing: 0.05em; text-transform: uppercase;
+}
+.shop__count { color: rgba(255,255,255,0.4); margin-top: 0.25rem; font-size: 0.875rem; }
+
+.shop__body {
+  display: grid; grid-template-columns: 220px 1fr;
+  gap: 2.5rem; padding-top: 2.5rem; padding-bottom: 4rem; align-items: start;
+}
+
+.shop__sidebar { position: sticky; top: 88px; }
+.shop__sidebar h3 {
+  font-family: var(--font-display); font-size: 1rem; text-transform: uppercase;
+  letter-spacing: 0.08em; margin-bottom: 0.75rem; color: var(--mid-gray);
+}
+
+.category-list { list-style: none; display: flex; flex-direction: column; gap: 3px; }
+.category-btn {
+  width: 100%; text-align: left; background: none; border: none; cursor: pointer;
+  padding: 0.5rem 0.75rem; border-radius: var(--radius-sm);
+  font-family: var(--font-body); font-size: 0.9rem; font-weight: 600;
+  color: var(--navy); transition: all var(--transition);
+}
+.category-btn:hover { background: var(--light-gray); }
+.category-btn.active {
+  background: var(--navy); color: var(--white);
+}
+
+.shop__toolbar {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 1.5rem;
+}
+.shop__results { color: var(--mid-gray); font-size: 0.875rem; }
+
+.sort-select {
+  background: var(--white); border: 2px solid var(--light-gray);
+  padding: 0.4rem 0.75rem; border-radius: var(--radius-sm);
+  font-family: var(--font-body); font-size: 0.875rem; font-weight: 600;
+  color: var(--navy); cursor: pointer; outline: none;
+  transition: border-color var(--transition);
+}
+.sort-select:focus { border-color: var(--orange); }
+
+.shop__empty {
+  text-align: center; padding: 4rem 2rem;
+  display: flex; flex-direction: column; align-items: center; gap: 1rem;
+}
+.shop__empty span { font-size: 3rem; }
+.shop__empty p { color: var(--mid-gray); }
+
+@media (max-width: 768px) {
+  .shop__body { grid-template-columns: 1fr; }
+  .shop__sidebar { position: static; }
+  .category-list { flex-direction: row; flex-wrap: wrap; }
+}
