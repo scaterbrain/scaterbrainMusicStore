@@ -1,0 +1,307 @@
+# =============================================================================
+# Scatterbrain Music — Kubernetes Deployment Manifest
+# =============================================================================
+#
+# Resources defined in this file (in order):
+#   1. Namespace
+#   2. ConfigMap          — non-secret environment config
+#   3. Deployment         — app pods (2 replicas by default)
+#   4. Service            — ClusterIP for internal routing
+#   5. Ingress            — external HTTP/HTTPS access
+#   6. HorizontalPodAutoscaler — auto-scale on CPU
+#   7. PodDisruptionBudget     — safe rolling updates
+#
+# Usage:
+#   # Apply everything
+#   kubectl apply -f k8s.yml
+#
+#   # Check rollout status
+#   kubectl rollout status deployment/scatterbrain-music -n scatterbrain
+#
+#   # Tear everything down
+#   kubectl delete -f k8s.yml
+#
+# Before applying:
+#   1. Build & push your image:
+#        docker build -t <your-registry>/scatterbrain-music:1.0.0 .
+#        docker push <your-registry>/scatterbrain-music:1.0.0
+#   2. Update the image field in the Deployment below.
+#   3. Update the host field in the Ingress below.
+# =============================================================================
+
+---
+# ── 1. Namespace ──────────────────────────────────────────────────────────────
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: scatterbrain
+  labels:
+    app.kubernetes.io/name: scatterbrain-music
+    app.kubernetes.io/managed-by: kubectl
+
+---
+# ── 2. ConfigMap ──────────────────────────────────────────────────────────────
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: scatterbrain-config
+  namespace: scatterbrain
+  labels:
+    app.kubernetes.io/name: scatterbrain-music
+    app.kubernetes.io/component: config
+data:
+  ASPNETCORE_ENVIRONMENT: "Production"
+  ASPNETCORE_URLS: "http://+:8080"
+  # Add further non-secret config keys here, e.g.:
+  # ASPNETCORE_LOGGING__LOGLEVEL__DEFAULT: "Warning"
+
+---
+# ── 3. Deployment ─────────────────────────────────────────────────────────────
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scatterbrain-music
+  namespace: scatterbrain
+  labels:
+    app.kubernetes.io/name: scatterbrain-music
+    app.kubernetes.io/component: web
+  annotations:
+    # Enables kubectl rollout undo
+    kubernetes.io/change-cause: "Initial deployment v1.0.0"
+spec:
+  replicas: 2
+
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: scatterbrain-music
+
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1         # one extra pod during rollout
+      maxUnavailable: 0   # never go below desired replica count
+
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: scatterbrain-music
+        app.kubernetes.io/component: web
+      annotations:
+        # Force pod restart when ConfigMap changes (opt-in)
+        checksum/config: "update-this-on-configmap-change"
+    spec:
+      # ── Security ────────────────────────────────────────────────────────────
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1001        # matches the 'scatterbrain' user in the Dockerfile
+        runAsGroup: 1001
+        fsGroup: 1001
+        seccompProfile:
+          type: RuntimeDefault
+
+      # ── Graceful shutdown ───────────────────────────────────────────────────
+      terminationGracePeriodSeconds: 30
+
+      # ── Spread across nodes/zones ───────────────────────────────────────────
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: DoNotSchedule
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/name: scatterbrain-music
+
+      containers:
+        - name: scatterbrain-music
+          # ── TODO: replace with your registry/image:tag ─────────────────────
+          image: scaterbrain/scaterbrainmusicstore:latest
+          imagePullPolicy: Always
+
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+
+          # ── Environment from ConfigMap ──────────────────────────────────────
+          envFrom:
+            - configMapRef:
+                name: scatterbrain-config
+          # To add secrets (e.g. a future DB connection string), use:
+          # envFrom:
+          #   - secretRef:
+          #       name: scatterbrain-secrets
+
+          # ── Resource limits ─────────────────────────────────────────────────
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "256Mi"
+
+          # ── Probes ──────────────────────────────────────────────────────────
+          # Startup probe: gives the .NET runtime time to JIT on cold start
+          startupProbe:
+            httpGet:
+              path: /api/products/featured
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            failureThreshold: 12   # up to 60 s before liveness takes over
+
+          # Liveness probe: restart the pod if it becomes unresponsive
+          livenessProbe:
+            httpGet:
+              path: /api/products/featured
+              port: http
+            initialDelaySeconds: 0
+            periodSeconds: 15
+            timeoutSeconds: 5
+            failureThreshold: 3
+
+          # Readiness probe: stop sending traffic until the pod is ready
+          readinessProbe:
+            httpGet:
+              path: /api/products/featured
+              port: http
+            initialDelaySeconds: 0
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 2
+
+          # ── Container security ──────────────────────────────────────────────
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
+
+          # ── Writable temp dirs needed by ASP.NET ────────────────────────────
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+            - name: aspnet-tmp
+              mountPath: /app/tmp
+
+      volumes:
+        - name: tmp
+          emptyDir: {}
+        - name: aspnet-tmp
+          emptyDir: {}
+
+---
+# ── 4. Service ────────────────────────────────────────────────────────────────
+apiVersion: v1
+kind: Service
+metadata:
+  name: scatterbrain-music
+  namespace: scatterbrain
+  labels:
+    app.kubernetes.io/name: scatterbrain-music
+    app.kubernetes.io/component: web
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: scatterbrain-music
+  ports:
+    - name: http
+      port: 80
+      targetPort: http     # resolves to containerPort named 'http' (8080)
+      protocol: TCP
+
+---
+# ── 5. Ingress ────────────────────────────────────────────────────────────────
+# Requires an Ingress controller (e.g. ingress-nginx) installed in the cluster.
+# For TLS, cert-manager is recommended: https://cert-manager.io
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: scatterbrain-music
+  namespace: scatterbrain
+  labels:
+    app.kubernetes.io/name: scatterbrain-music
+    app.kubernetes.io/component: ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    # Uncomment to enable automatic TLS via cert-manager:
+    # cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    # nginx.ingress.kubernetes.io/ssl-redirect: "true"
+spec:
+  ingressClassName: nginx
+  # ── TODO: replace with your domain ──────────────────────────────────────────
+  rules:
+    - host: musicstore.scaterbrain.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: scatterbrain-music
+                port:
+                  name: http
+  # Uncomment and add your domain once cert-manager is configured:
+  # tls:
+  #   - hosts:
+  #       - scatterbrain.example.com
+  #     secretName: scatterbrain-tls
+
+---
+# ── 6. HorizontalPodAutoscaler ────────────────────────────────────────────────
+# Requires the metrics-server to be installed in the cluster.
+# Scales between 2 and 6 replicas based on CPU utilisation.
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: scatterbrain-music
+  namespace: scatterbrain
+  labels:
+    app.kubernetes.io/name: scatterbrain-music
+    app.kubernetes.io/component: autoscaler
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: scatterbrain-music
+  minReplicas: 2
+  maxReplicas: 6
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 120   # wait 2 min before scaling down
+      policies:
+        - type: Pods
+          value: 1
+          periodSeconds: 60
+    scaleUp:
+      stabilizationWindowSeconds: 30
+      policies:
+        - type: Pods
+          value: 2
+          periodSeconds: 30
+
+---
+# ── 7. PodDisruptionBudget ────────────────────────────────────────────────────
+# Ensures at least 1 pod stays running during voluntary disruptions
+# (node drains, cluster upgrades, etc.)
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: scatterbrain-music
+  namespace: scatterbrain
+  labels:
+    app.kubernetes.io/name: scatterbrain-music
+    app.kubernetes.io/component: pdb
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: scatterbrain-music
