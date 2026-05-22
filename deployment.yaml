@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scaterbrain-musicstore
+  labels:
+    app: scaterbrain-musicstore
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: scaterbrain-musicstore
+  template:
+    metadata:
+      labels:
+        app: scaterbrain-musicstore
+    spec:
+      containers:
+      - name: musicstore
+        image: docker.io/scaterbrain/scaterbrainmusicstore:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+        resources:
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
+          requests:
+            cpu: "250m"
+            memory: "256Mi"

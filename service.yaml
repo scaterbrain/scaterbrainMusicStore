@@ -1,0 +1,11 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: scaterbrain-musicstore-service
+spec:
+  selector:
+    app: scaterbrain-musicstore
+  ports:
+    - port: 8080
+      targetPort: 8080
