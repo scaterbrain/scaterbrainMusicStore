@@ -15,7 +15,8 @@ service:
                   connectorRef: ScaterbrainRepositoryConnector
                   gitFetchType: Branch
                   paths:
-                    - k8s.yaml
+                    - deployment.yaml
+                    - service.yaml
                   branch: main
               skipResourceVersioning: false
               enableDeclarativeRollback: false
