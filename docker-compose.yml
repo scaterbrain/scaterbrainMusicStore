@@ -1,0 +1,18 @@
+services:
+  scatterbrain-music:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: scatterbrain-music:latest
+    container_name: scatterbrain-music
+    ports:
+      - "8080:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8080/api/products/featured || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s

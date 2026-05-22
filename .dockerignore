@@ -1,0 +1,24 @@
+# .NET build artifacts
+**/bin/
+**/obj/
+**/*.user
+
+# Node / frontend
+ScatterbrainMusic.Client/node_modules/
+ScatterbrainMusic.Client/dist/
+
+# Git / IDE
+.git/
+.gitignore
+.vscode/
+.idea/
+**/.vs/
+
+# Docker files themselves (not needed inside image)
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Docs
+README.md
+*.md

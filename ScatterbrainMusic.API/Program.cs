@@ -43,9 +43,26 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors("AllowReactApp");
-app.UseHttpsRedirection();
+
+// In production the React build is served from wwwroot by Kestrel
+if (!app.Environment.IsDevelopment())
+{
+    app.UseDefaultFiles();   // serves index.html for /
+    app.UseStaticFiles();    // serves JS/CSS/assets from wwwroot
+}
+else
+{
+    app.UseHttpsRedirection();
+}
+
 app.UseAuthorization();
 app.MapControllers();
+
+// SPA fallback: any non-API route returns index.html so React Router handles it
+if (!app.Environment.IsDevelopment())
+{
+    app.MapFallbackToFile("index.html");
+}
 
 app.Run();
 

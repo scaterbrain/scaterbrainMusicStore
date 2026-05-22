@@ -54,7 +54,43 @@ ScatterbrainMusic/
 
 ---
 
-## 🚀 Getting Started
+## 🐳 Docker (Recommended)
+
+The project ships as a **single container** — the .NET API serves the React build as static files via Kestrel. No separate frontend server needed in production.
+
+### Quick start with Docker Compose
+
+```bash
+docker compose up --build
+```
+
+Open **http://localhost:8080** — both the UI and API (`/api/*`) are served from the same origin.
+
+### Or with plain Docker
+
+```bash
+# Build
+docker build -t scatterbrain-music .
+
+# Run
+docker run -p 8080:8080 scatterbrain-music
+```
+
+### What the build does (3 stages)
+
+| Stage | Base image | What happens |
+|-------|-----------|--------------|
+| `frontend-build` | `node:20-alpine` | `npm ci` + `npm run build` → `/dist` |
+| `api-build` | `dotnet/sdk:8.0-alpine` | `dotnet restore` → **run NUnit tests** → `dotnet publish` |
+| `runtime` | `dotnet/aspnet:8.0-alpine` | Copies publish output + React `dist/` into `wwwroot/` |
+
+> Tests run **inside the Docker build**. If any NUnit test fails, the image will not build.
+
+The final image is ~120 MB (Alpine-based, non-root user).
+
+---
+
+## 🚀 Getting Started (local dev without Docker)
 
 ### Prerequisites
 
