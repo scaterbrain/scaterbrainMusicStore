@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: musicstore
-        image: docker.io/scaterbrain/scaterbrainmusicstore:latest
+        image: docker.io/scaterbrain/scaterbrainmusicstore:<+pipeline.sequenceId>
         imagePullPolicy: Always
         ports:
         - containerPort: 8080
