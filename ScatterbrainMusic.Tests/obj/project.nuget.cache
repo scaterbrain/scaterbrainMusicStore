@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "VjjMXvJCGMQ=",
+  "dgSpecHash": "9PzdcRVzAs8=",
   "success": true,
-  "projectFilePath": "C:\\Users\\robsc\\Downloads\\ScatterbrainMusic\\ScatterbrainMusic\\ScatterbrainMusic.Tests\\ScatterbrainMusic.Tests.csproj",
+  "projectFilePath": "C:\\Users\\robsc\\Documents\\GitHub\\scaterbrainMusicStore\\ScatterbrainMusic.Tests\\ScatterbrainMusic.Tests.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\robsc\\.nuget\\packages\\castle.core\\5.1.1\\castle.core.5.1.1.nupkg.sha512",
     "C:\\Users\\robsc\\.nuget\\packages\\coverlet.collector\\6.0.0\\coverlet.collector.6.0.0.nupkg.sha512",

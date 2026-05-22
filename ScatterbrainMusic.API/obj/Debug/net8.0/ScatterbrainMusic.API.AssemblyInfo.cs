@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ScatterbrainMusic.API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+dfd0796e00b0814cd9cd89f05b5b49b1bdce590f")]
 [assembly: System.Reflection.AssemblyProductAttribute("ScatterbrainMusic.API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ScatterbrainMusic.API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

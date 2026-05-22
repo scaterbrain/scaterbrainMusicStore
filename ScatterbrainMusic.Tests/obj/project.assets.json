@@ -3420,11 +3420,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\robsc\\Downloads\\ScatterbrainMusic\\ScatterbrainMusic\\ScatterbrainMusic.Tests\\ScatterbrainMusic.Tests.csproj",
+      "projectUniqueName": "C:\\Users\\robsc\\Documents\\GitHub\\scaterbrainMusicStore\\ScatterbrainMusic.Tests\\ScatterbrainMusic.Tests.csproj",
       "projectName": "ScatterbrainMusic.Tests",
-      "projectPath": "C:\\Users\\robsc\\Downloads\\ScatterbrainMusic\\ScatterbrainMusic\\ScatterbrainMusic.Tests\\ScatterbrainMusic.Tests.csproj",
+      "projectPath": "C:\\Users\\robsc\\Documents\\GitHub\\scaterbrainMusicStore\\ScatterbrainMusic.Tests\\ScatterbrainMusic.Tests.csproj",
       "packagesPath": "C:\\Users\\robsc\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\robsc\\Downloads\\ScatterbrainMusic\\ScatterbrainMusic\\ScatterbrainMusic.Tests\\obj\\",
+      "outputPath": "C:\\Users\\robsc\\Documents\\GitHub\\scaterbrainMusicStore\\ScatterbrainMusic.Tests\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -3446,8 +3446,8 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "C:\\Users\\robsc\\Downloads\\ScatterbrainMusic\\ScatterbrainMusic\\ScatterbrainMusic.API\\ScatterbrainMusic.API.csproj": {
-              "projectPath": "C:\\Users\\robsc\\Downloads\\ScatterbrainMusic\\ScatterbrainMusic\\ScatterbrainMusic.API\\ScatterbrainMusic.API.csproj"
+            "C:\\Users\\robsc\\Documents\\GitHub\\scaterbrainMusicStore\\ScatterbrainMusic.API\\ScatterbrainMusic.API.csproj": {
+              "projectPath": "C:\\Users\\robsc\\Documents\\GitHub\\scaterbrainMusicStore\\ScatterbrainMusic.API\\ScatterbrainMusic.API.csproj"
             }
           }
         }

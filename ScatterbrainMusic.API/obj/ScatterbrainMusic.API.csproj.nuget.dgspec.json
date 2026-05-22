@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\robsc\\Downloads\\ScatterbrainMusic\\ScatterbrainMusic\\ScatterbrainMusic.API\\ScatterbrainMusic.API.csproj": {}
+    "C:\\Users\\robsc\\Documents\\GitHub\\scaterbrainMusicStore\\ScatterbrainMusic.API\\ScatterbrainMusic.API.csproj": {}
   },
   "projects": {
-    "C:\\Users\\robsc\\Downloads\\ScatterbrainMusic\\ScatterbrainMusic\\ScatterbrainMusic.API\\ScatterbrainMusic.API.csproj": {
+    "C:\\Users\\robsc\\Documents\\GitHub\\scaterbrainMusicStore\\ScatterbrainMusic.API\\ScatterbrainMusic.API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\robsc\\Downloads\\ScatterbrainMusic\\ScatterbrainMusic\\ScatterbrainMusic.API\\ScatterbrainMusic.API.csproj",
+        "projectUniqueName": "C:\\Users\\robsc\\Documents\\GitHub\\scaterbrainMusicStore\\ScatterbrainMusic.API\\ScatterbrainMusic.API.csproj",
         "projectName": "ScatterbrainMusic.API",
-        "projectPath": "C:\\Users\\robsc\\Downloads\\ScatterbrainMusic\\ScatterbrainMusic\\ScatterbrainMusic.API\\ScatterbrainMusic.API.csproj",
+        "projectPath": "C:\\Users\\robsc\\Documents\\GitHub\\scaterbrainMusicStore\\ScatterbrainMusic.API\\ScatterbrainMusic.API.csproj",
         "packagesPath": "C:\\Users\\robsc\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\robsc\\Downloads\\ScatterbrainMusic\\ScatterbrainMusic\\ScatterbrainMusic.API\\obj\\",
+        "outputPath": "C:\\Users\\robsc\\Documents\\GitHub\\scaterbrainMusicStore\\ScatterbrainMusic.API\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
