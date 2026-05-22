@@ -5,7 +5,7 @@ metadata:
   labels:
     app: scaterbrain-musicstore
 spec:
-  replicas: 1
+  replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
       app: scaterbrain-musicstore
@@ -16,10 +16,10 @@ spec:
     spec:
       containers:
       - name: musicstore
-        image: docker.io/scaterbrain/scaterbrainmusicstore:<+pipeline.sequenceId>
-        imagePullPolicy: Always
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
         ports:
-        - containerPort: 8080
+        - containerPort: {{ .Values.service.targetPort }}
         resources:
           limits:
             cpu: "500m"
