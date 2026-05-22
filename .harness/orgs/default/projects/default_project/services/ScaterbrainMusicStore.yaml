@@ -30,12 +30,6 @@ service:
                   files:
                     - /scaterbrainmusicstore/values
               optionalValuesYaml: false
-      variables:
-        - name: image.tag
-          type: String
-          description: ""
-          required: true
-          value: <+pipeline.sequenceId>
   gitOpsEnabled: false
   orgIdentifier: default
   projectIdentifier: default_project
