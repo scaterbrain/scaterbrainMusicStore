@@ -1,0 +1,24 @@
+service:
+  name: scatterbrain-music
+  identifier: scatterbrainmusic
+  serviceDefinition:
+    type: Kubernetes
+    spec:
+      manifests:
+        - manifest:
+            identifier: k8s
+            type: K8sManifest
+            spec:
+              store:
+                type: Github
+                spec:
+                  connectorRef: ScaterbrainRepositoryConnector
+                  gitFetchType: Branch
+                  paths:
+                    - k8s.yaml
+                  branch: main
+              skipResourceVersioning: false
+              enableDeclarativeRollback: false
+  gitOpsEnabled: false
+  orgIdentifier: default
+  projectIdentifier: default_project
